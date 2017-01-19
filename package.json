@@ -1,0 +1,37 @@
+{
+  "name": "restful-api",
+  "version": "0.0.1",
+  "description": "restful api endpoint",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikizdr/mean.git"
+  },
+  "keywords": [
+    "mean",
+    "restful",
+    "api"
+  ],
+  "author": "mikizdr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikizdr/mean/issues"
+  },
+  "homepage": "https://github.com/mikizdr/mean#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.16.0",
+    "express": "^4.14.0",
+    "mongoose": "^4.7.7",
+    "morgan": "^1.7.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.0.4",
+    "jshint": "^2.9.4"
+  }
+}
