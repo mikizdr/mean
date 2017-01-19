@@ -99,6 +99,46 @@ apiRouter.route('/users')
         });
     });
 
+// on routes that end in /users/:user_id
+//-----------------------------------------
+apiRouter.route('/users/:user_id')
+
+    // get the user with that id
+    // (accessed at GET http://localhost:8080/api/users/:user_id)
+    .get(function(req, res) {
+        User.findById(req.params.user_id, function(err, user) {
+            if (err) res.send(err);
+
+            // return that user
+            res.json(user);
+        });
+    })
+
+    // update the user with this id
+    // (accessed at PUT http://localhost:8080/api/users/:user_id)
+    .put(function(req, res) {
+
+        // use our user model to find the user we want
+        User.findById(req.params.user_id, function(err, user) {
+
+            if (err) res.send(err);
+
+            // update the user info only if its new
+            if (req.body.name) user.name = req.body.name;
+            if (req.body.username) user.username = req.body.username;
+            if (req.body.password) user.password = req.body.password;
+
+            // save the user
+            user.save(function(err) {
+                if (err) res.send(err);
+
+                // return the message
+                res.json({ message: 'User updated!'});
+            });
+
+        });
+    })
+
 // REGISTER OUR ROUTES --------------------
 // all of our routes will be prefixed with /api
 app.use('/api', apiRouter);
