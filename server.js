@@ -33,7 +33,7 @@ mongoose.connect('mongodb://user:kikiriki07@ds111798.mlab.com:11798/contact_list
 // ROUTES FOR OUR API ----------------------
 // =========================================
 
-// basic route ofr the home page
+// basic route for the home page
 app.get('/', function(req, res) {
     res.send('Welcome to the home page!');
 });
@@ -41,13 +41,24 @@ app.get('/', function(req, res) {
 // get an instance of the express router
 var apiRouter = express.Router();
 
-// test to make sure everything is wokring
-// accesse at GET http://localhost:8080/api
+// midleware to use for all requests
+apiRouter.use(function(req, res, next) {
+
+    // do logging
+    console.log('Somebody just came to our app!');
+
+    // we`ll add more to the middleware later
+    // this is where we will authenticate users
+    
+    // we go to the next routes and don`t stop here
+    next();
+});
+
+// test route to make sure everything is working
+// accessed at GET http://localhost:8080/api
 apiRouter.get('/', function(req, res) {
     res.json({ message: 'Hooray! Welcome to our api!'});
 });
-
-// more routes for our API will happen here
 
 // REGISTER OUR ROUTES --------------------
 // all of our routes will be prefixed with /api
