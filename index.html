@@ -42,6 +42,7 @@
                     <th>name</th>
                     <th>Color</th>
                     <th>Nerd Level</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,10 +50,35 @@
                     <td>{{ computer.name }}</td>
                     <td>{{ computer.color }}</td>
                     <td>{{ computer.nerdness }}</td>
+                    <td><button class="btn btn-danger" ng-click="main.removeComputer()">Remove</button></td>
                 </tr>
             </tbody>
         </table>
+
+        <!--form to add computer to the list-->
+        <form class="form-inline" ng-submit="main.addComputer()">
+
+            <input type="text" class="form-control" placeholder="Computer name" ng-model="main.computerData.name">
+            <input type="text" class="form-control" placeholder="Computer color" ng-model="main.computerData.color">
+            <input type="number" class="form-control" placeholder="Computer nerdness" ng-model="main.computerData.nerdness">
+            <button class="btn btn-success">Add</button>
+            
+
+        </form>
+
     </div>
+
+    <div class="panel panel-default">
+    <div class="panel-heading">Post A Message</div>
+    <div class="panel-body">
+      <div class="input-group">
+        <input type="text" class="form-control  custom-control" placeholder="Computer name" ng-model="main.computerData.name">
+        <input type="text" class="form-control  custom-control" placeholder="Computer color" ng-model="main.computerData.color">
+        <input type="number" class="form-control  custom-control" placeholder="Computer nerdness" ng-model="main.computerData.nerdness">
+        <span class="input-group-addon btn btn-primary" ng-click="main.addComputer()">Post</span>
+      </div>
+    </div>
+  </div>
 
 
 
