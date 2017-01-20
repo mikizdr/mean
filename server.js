@@ -1,9 +1,16 @@
+// BASE SETUP
+// ==========================================
+
 var express     = require('express');       // call ecpress
 var app         = express();                // define our app using express
 var bodyParser  = require('body-parser');   // get body-parser
 var morgan      = require('morgan');        // use to see request in the console
 var mongoose    = require('mongoose');      // for working with database
 var port        = process.env.PORT || 8080; // set the port for our app
+var jwt         = require('jsonwebtoken');  // grab jsonwebtoken package in our server
+
+// super secret for creating tokens
+var superSecret = 'ilovescotchscotchyscotchscotch';
 
 // Cross Origin Request Settings
 var cors        = require('./services/cors');
@@ -24,6 +31,7 @@ app.use(cors);
 app.use(morgan('dev'));
 
 // connect to our database (hosted on mlab)
+mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://user:kikiriki07@ds111798.mlab.com:11798/contact_list', function(err, db) {
     if(!err) {
         console.log('We are connected to mongo!');
@@ -41,17 +49,67 @@ app.get('/', function(req, res) {
 // get an instance of the express router
 var apiRouter = express.Router();
 
+// route to authenticate a user
+// accessed at POST http://localhost:8080/api/authenticate
+apiRouter.post('/authenticate', function(req, res) {
+
+    // find the user
+    // select the name, username and password explicitly
+    User.findOne({
+        username: req.body.username
+    }).select('name username password').exec(function(err, user) {
+
+        if (err) throw err;
+
+        // no user with that username was found
+        if (!user) {
+            res.json({
+                success: false,
+                message: 'Authentication failed. User not found.'
+            });
+        } else if (user) {
+            
+            //check if password matches
+            var validPassword = user.comparePassword(req.body.password);
+            if (!validPassword) {
+                res.json({
+                    success: false,
+                    message: 'Authentication failed. Wrong password.'
+                });
+            } else {
+
+                // if user is found and password is right
+                // create token
+                var token = jwt.sign({
+                    name: user.name,
+                    username: user.username
+                }, superSecret, {
+                    expiresIn: '24h' // expires in 24 h
+                });
+
+                // return the information including token as json
+                res.json({
+                    success: true,
+                    message: 'Enjoy your token!',
+                    token: token
+                });
+            }
+        }
+    });
+
+});
+
 // midleware to use for all requests
+// this is where we will authenticate users
 apiRouter.use(function(req, res, next) {
 
     // do logging
     console.log('Somebody just came to our app!');
 
-    // we`ll add more to the middleware later
-    // this is where we will authenticate users
+
     
-    // we go to the next routes and don`t stop here
-    next();
+    next(); // used to be here but it have moved to be in if/else statement so that
+    // our users will only continue forward if they have a valid token and it verified correctly
 });
 
 // test route to make sure everything is working
@@ -103,7 +161,7 @@ apiRouter.route('/users')
 //-----------------------------------------
 apiRouter.route('/users/:user_id')
 
-    // get the user with that id
+    // get the user with this id
     // (accessed at GET http://localhost:8080/api/users/:user_id)
     .get(function(req, res) {
         User.findById(req.params.user_id, function(err, user) {
