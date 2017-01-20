@@ -1,5 +1,5 @@
 // name our angular app
-angular.module('firstApp', [])
+angular.module('firstApp', ['routerRoutes'])
 
     .controller('mainController', function() {
 
@@ -49,4 +49,29 @@ angular.module('firstApp', [])
             // after our computer has been added, clear the form
             // vm.computerData = {};
         };
+    })
+
+    // home page specific controller
+    .controller('homeController', function() {
+
+        var vm = this;
+
+        vm.message = 'This is the home page!';
+    })
+
+    // about page controller
+    .controller('aboutController', function() {
+
+        var vm = this;
+
+        vm.message = 'Look! I am an about page.';
+    })
+
+    // contact page controller
+    .controller('contactController', function() {
+
+        // bind this to view-model
+        var vm = this;
+
+        vm.message = 'Contact us! MZ. This is just a demo.';
     });
