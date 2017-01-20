@@ -6,6 +6,8 @@ angular.module('firstApp', [])
         // bind this to vm (view-model)
         var vm = this;
 
+        vm.bigMessage = 'A smooth sea never made a skilled sailor.';
+
         // define  variables and objects on this
         // this lets them be available to our views
         // define a basic variables

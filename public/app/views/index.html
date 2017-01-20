@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>My First Angular Application!</title>
+
+     <!--set the base path for angular routing -->
+     <!-- base href="/" -->
+
+     <!--CSS -->
+    <!-- load Bootstrap and Fontawesome from CDN -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 50px;
+        }
+    </style>
+
+    <!--JS-->
+    <!--load angular and angular-route via CDN-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script>
+
+     <!--load our custom angular app files -->
+    <script src="../app.js"></script>
+    <script src="../app.routes.js"></script>
+
+  </head>
+  <body class="container" ng-app="firstApp" ng-controller="mainController as main">
+
+       <!--HEADER AND NAVBAR -->
+       <header>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Леа</a>
+                    </div>
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="/"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a></li>
+                        <li><a href="/"><i class="fa fa-shield"></i> About <span class="sr-only">(current)</span></a></li>
+                        <li><a href="/"><i class="fa fa-comment"></i> Contact <span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">Link</a></li>
+                        <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="/"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a></li>
+                        <li><a href="/about"><i class="fa fa-shield"></i> About <span class="sr-only">(current)</span></a></li>
+                        <li><a href="/contact"><i class="fa fa-comment"></i> Contact <span class="sr-only">(current)</span></a></li>
+                    </ul>
+                    </div>
+                </div>
+            </nav>
+       </header>
+
+        <!--MAIN CONTENT AND INJECTED VIEWS -->
+        <main>
+
+            stuff goes here!
+
+             <!--angular templating will go here -->
+              <!--this is where content will be injected -->
+
+        </main>
+
+    <div class="jumbotron">
+
+        <div class="form-group">
+            <label for="">Message</label>
+            <input type="text" class="form-control" ng-model="main.message">
+        </div>
+
+        <!--display the message-->
+        <h2>This is my message</h2>
+        {{ main.message }}
+        
+        <!--display the list using ng-repeat-->
+        <h2>This is my list:</h2>
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>name</th>
+                    <th>Color</th>
+                    <th>Nerd Level</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="computer in main.computers">
+                    <td>{{ computer.name }}</td>
+                    <td>{{ computer.color }}</td>
+                    <td>{{ computer.nerdness }}</td>
+                    <td><button class="btn btn-danger" ng-click="main.removeComputer()">Remove</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!--form to add computer to the list-->
+        <form class="form-inline" ng-submit="main.addComputer()">
+
+            <input type="text" class="form-control" placeholder="Computer name" ng-model="main.computerData.name">
+            <input type="text" class="form-control" placeholder="Computer color" ng-model="main.computerData.color">
+            <input type="number" class="form-control" placeholder="Computer nerdness" ng-model="main.computerData.nerdness">
+            <button class="btn btn-success">Add</button>
+            
+
+        </form>
+
+    </div>
+
+    <div class="panel panel-default">
+    <div class="panel-heading">Post A Message</div>
+    <div class="panel-body">
+      <div class="input-group">
+        <input type="text" class="form-control  custom-control" placeholder="Computer name" ng-model="main.computerData.name">
+        <input type="text" class="form-control  custom-control" placeholder="Computer color" ng-model="main.computerData.color">
+        <input type="number" class="form-control  custom-control" placeholder="Computer nerdness" ng-model="main.computerData.nerdness">
+        <span class="input-group-addon btn btn-primary" ng-click="main.addComputer()">Post</span>
+      </div>
+    </div>
+  </div>
+
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
