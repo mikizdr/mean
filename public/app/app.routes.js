@@ -14,7 +14,7 @@ angular.module('routerRoutes', ['ngRoute'])
 
             // route for the about page
             .when('/about', {
-                templateUrl : 'views/pages/hoome.html',
+                templateUrl : 'views/pages/about.html',
                 controller  : 'aboutController',
                 controllerAs: 'about'
             })
@@ -28,4 +28,4 @@ angular.module('routerRoutes', ['ngRoute'])
         
         // ser our app to have pretty URLs
         $locationProvider.html5Mode(true);
-    })
+    });
