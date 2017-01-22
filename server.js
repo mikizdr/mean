@@ -1,11 +1,17 @@
+// BASE SETUP
+// ==========================================
+
 var express     = require('express');       // call ecpress
 var app         = express();                // define our app using express
 var bodyParser  = require('body-parser');   // get body-parser
 var morgan      = require('morgan');        // use to see request in the console
 var mongoose    = require('mongoose');      // for working with database
-var port        = process.env.PORT || 8080; // set the port for our app
+var jwt         = require('jsonwebtoken');  // grab jsonwebtoken package in our server
+var path        = require('path');
 
-// Cross Origin Request Settings
+var config      = require('./config');
+
+// Cross Origin Reseources Sharing
 var cors        = require('./services/cors');
 
 // pull in user mode from app/models/user
@@ -24,138 +30,40 @@ app.use(cors);
 app.use(morgan('dev'));
 
 // connect to our database (hosted on mlab)
-mongoose.connect('mongodb://user:kikiriki07@ds111798.mlab.com:11798/contact_list', function(err, db) {
+mongoose.Promise = global.Promise;
+mongoose.connect(config.database, function(err, db) {
     if(!err) {
         console.log('We are connected to mongo!');
     }
 });
 
+// set static file location
+// used for requests that our frontend will make
+app.use(express.static(__dirname + '/public/app'));
+
 // ROUTES FOR OUR API ----------------------
 // =========================================
 
-// basic route for the home page
-app.get('/', function(req, res) {
-    res.send('Welcome to the home page!');
-});
-
-// get an instance of the express router
-var apiRouter = express.Router();
-
-// midleware to use for all requests
-apiRouter.use(function(req, res, next) {
-
-    // do logging
-    console.log('Somebody just came to our app!');
-
-    // we`ll add more to the middleware later
-    // this is where we will authenticate users
-    
-    // we go to the next routes and don`t stop here
-    next();
-});
-
-// test route to make sure everything is working
-// accessed at GET http://localhost:8080/api
-apiRouter.get('/', function(req, res) {
-    res.json({ message: 'Hooray! Welcome to our api!'});
-});
-
-// on routes that end in /users
-// ----------------------------------------
-apiRouter.route('/users')
-
-    // create a user (accessed at POST http://localhost:8080/api/users)
-    .post(function(req, res) {
-
-        // create a new instance of the User model
-        var user = new User();
-
-        // set the users information (comes from request)
-        user.name = req.body.name;
-        user.username = req.body.username;
-        user.password = req.body.password;
-
-        // save the user nad check for errors
-        user.save(function(err) {
-            if (err) {
-                // ducplicate entry
-                if (err.code == 11000)
-                    return res.json({ success: false, message: 'A user with that username already exists.' });
-                else
-                    return res.send(err);
-            }
-
-            res.json({ message: 'User created!' });
-        });
-    })
-
-    // get all the users (accessed at GET http://localhost:8080/api/users)
-    .get(function(req, res) {
-        User.find(function(err, users) {
-            if (err) res.send(err);
-
-            // return the users
-            res.json(users);
-        });
-    });
-
-// on routes that end in /users/:user_id
-//-----------------------------------------
-apiRouter.route('/users/:user_id')
-
-    // get the user with that id
-    // (accessed at GET http://localhost:8080/api/users/:user_id)
-    .get(function(req, res) {
-        User.findById(req.params.user_id, function(err, user) {
-            if (err) res.send(err);
-
-            // return that user
-            res.json(user);
-        });
-    })
-
-    // update the user with this id
-    // (accessed at PUT http://localhost:8080/api/users/:user_id)
-    .put(function(req, res) {
-
-        // use our user model to find the user we want
-        User.findById(req.params.user_id, function(err, user) {
-
-            if (err) res.send(err);
-
-            // update the user info only if its new
-            if (req.body.name) user.name = req.body.name;
-            if (req.body.username) user.username = req.body.username;
-            if (req.body.password) user.password = req.body.password;
-
-            // save the user
-            user.save(function(err) {
-                if (err) res.send(err);
-
-                // return the message
-                res.json({ message: 'User updated!'});
-            });
-
-        });
-    })
-
-    // delete the user with thi id
-    // (accessed at DELETE http://localhost:8080/api/users/:user_id)
-    .delete(function(req, res) {
-        User.remove({
-            _id: req.params.user_id
-        }, function(err, user) {
-            if (err) return res.send(err);
-
-            res.json({ message: 'Successfully deleted!'});
-        });
-    });
-
-// REGISTER OUR ROUTES --------------------
+// API ROUTES
+// REGISTER OUR ROUTES ---------------------
 // all of our routes will be prefixed with /api
-app.use('/api', apiRouter);
+var apiRoutes = require('./app/routes/api')(app, express);
+app.use('/api', apiRoutes);
+
+// MAIN CATCHALL TOUTE ---------------------
+// SEND USERS TO FRONTEND ------------------
+// has to be registered after API ROUTES
+// Using the * will match all routes.It is important to 
+// put this route after the API routes since we only
+// want it to catch routes not handled by Node. 
+// If this were placed above the API routes, 
+// then our user would always be sent the index.html 
+// file and never even get to the API routes.
+app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
+});
 
 // STATR THE SERVER
-app.listen(port, function() {
-    console.log('Magic happens on port ' + port);
+app.listen(config.port, function() {
+    console.log('Magic happens on port ' + config.port);
 });
