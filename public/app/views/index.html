@@ -12,8 +12,10 @@
 
      <!--CSS -->
     <!-- load Bootstrap and Fontawesome from CDN -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         body {
             padding-top: 50px;
@@ -24,6 +26,8 @@
     <!--load angular and angular-route via CDN-->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+    
 
      <!--load our custom angular app files -->
     <script src="app.js"></script>
@@ -42,7 +46,7 @@
 
                     
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="/"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a></li>
+                        <li><a href="/"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a></li>
                         <li><a href="/about"><i class="fa fa-shield"></i> About <span class="sr-only">(current)</span></a></li>
                         <li><a href="/contact"><i class="fa fa-comment"></i> Contact <span class="sr-only">(current)</span></a></li>
                     </ul>
@@ -60,8 +64,9 @@
 
              <!--angular templating will go here -->
               <!--this is where content will be injected -->
-
-              <div ng-view></div>
+              <div class="content-views">
+                  <div ng-view></div>
+              </div>
 
         </main>
 

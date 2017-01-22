@@ -1,5 +1,5 @@
 // name our angular app
-angular.module('firstApp', ['routerRoutes'])
+angular.module('firstApp', ['routerRoutes', 'ngAnimate'])
 
     .controller('mainController', function() {
 
